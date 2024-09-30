@@ -1,4 +1,5 @@
 import { findVowels } from './exercises/exercise-01';
+import { deleteUser, list, updateUser } from './exercises/exercise-02';
 import './style.css';
 
 /**
@@ -51,3 +52,55 @@ function appendAnswerMessage(message: string) {
 document.getElementById('text-form')?.addEventListener('reset', () => {
   document.getElementById('first-exercise-answer')?.remove();
 });
+
+// Tabela de usuários
+function renderUserTable() {
+  document.querySelector('#user-table tbody')!.innerHTML = `
+  ${list
+    .map(
+      user => `
+    <tr>
+      <td>${user.id}</td>
+      <td>${user.name}</td>
+      <td>${user.bio}</td>
+      <td>
+        <button onclick="deleteUserFromTable(${user.id})" title="Excluir ${user.name}" >
+          <img src="../trash.svg" alt="Lixeira">
+        </button>
+      </td>
+    </tr>
+    `
+    )
+    .join('')} 
+`;
+}
+
+renderUserTable();
+
+(window as any).deleteUserFromTable = (id: number) => {
+  deleteUser(id);
+  renderUserTable();
+};
+
+// Atualizar dados do usuário
+document
+  .getElementById('user-form')
+  ?.addEventListener('submit', ($event: SubmitEvent) => {
+    $event.preventDefault();
+
+    const $form = new FormData($event.target as HTMLFormElement);
+    const id = Number($form.get('user-id'));
+    const data = {
+      bio: String($form.get('user-bio')),
+      name: String($form.get('user-name')),
+    };
+
+    updateUser(id, data);
+    renderUserTable();
+    resetUserForm();
+  });
+
+// Resetar form do usuário após o envio
+function resetUserForm() {
+  (document.getElementById('user-form') as HTMLFormElement).reset();
+}

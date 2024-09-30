@@ -66,7 +66,7 @@ export function updateUser(id: number, data: { bio?: string; name?: string }) {
   if (!user) return;
 
   for (const [key, value] of Object.entries(data)) {
-    user[key] = value;
+    if (value) user[key] = value;
   }
 }
 
