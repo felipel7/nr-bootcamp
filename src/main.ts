@@ -1,21 +1,8 @@
-import { findVowels } from './exercises/exercise-01';
+import { countVowels } from './exercises/exercise-01';
 import { deleteUser, list, updateUser } from './exercises/exercise-02';
 import './style.css';
 
-/**
- *
- * a) Dar um exemplo de uso com uma palavra recebida via parâmetro da função.
- *
- */
-const phrase = 'Olá mundo!';
-const vowelsCount = findVowels(phrase);
-console.log(createAnswerMessage(phrase, vowelsCount));
-
-/**
- *
- * b) Dar um exemplo de uso com uma palavra recebida via input no formulário.
- *
- */
+// 1.b) Dar um exemplo de uso com uma palavra recebida via input no formulário.
 document
   .getElementById('text-form')
   ?.addEventListener('submit', ($event: SubmitEvent) => {
@@ -25,7 +12,7 @@ document
     const inputValue = String($form.get('text-input'));
     if (!inputValue) return;
 
-    const vowelsCount = findVowels(inputValue);
+    const vowelsCount = countVowels(inputValue);
     const message = createAnswerMessage(inputValue, vowelsCount);
 
     appendAnswerMessage(message);
@@ -104,3 +91,8 @@ document
 function resetUserForm() {
   (document.getElementById('user-form') as HTMLFormElement).reset();
 }
+
+// 1.a) Dar um exemplo de uso com uma palavra recebida via parâmetro da função.
+const text = 'Olá mundo!';
+const totalVowels = countVowels(text);
+console.log(createAnswerMessage(text, totalVowels));
