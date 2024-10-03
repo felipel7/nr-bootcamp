@@ -55,8 +55,8 @@ function resetUserForm() {
     $event.preventDefault();
 
     const $form = new FormData($event.target as HTMLFormElement);
-    const inputValue = String($form.get('counter__input'));
-    if (!inputValue) return;
+    const inputValue = $form.get('counter__input');
+    if (!inputValue || typeof inputValue !== 'string') return;
 
     const vowelsCount = countVowels(inputValue);
     const message = createAnswerMessage(inputValue, vowelsCount);
