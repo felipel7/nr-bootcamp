@@ -1,5 +1,6 @@
+import { list } from './data/list';
 import { countVowels } from './exercises/exercise-01';
-import { deleteUser, list, updateUser } from './exercises/exercise-02';
+import { deleteUserImp, updateUser } from './exercises/exercise-02';
 import './style.css';
 
 function createAnswerMessage(text: string, totalVowels: number): string {
@@ -44,7 +45,7 @@ function resetUserForm() {
 }
 
 (window as any).deleteUserFromTable = (id: number) => {
-  deleteUser(id);
+  deleteUserImp(id);
   renderUserTable();
 };
 

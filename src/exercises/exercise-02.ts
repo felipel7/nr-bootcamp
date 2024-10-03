@@ -25,7 +25,7 @@ export function getName(id: number) {
  *
  */
 export function deleteUser(id: number) {
-  // list = list.filter(user => user.id !== id);
+  return list.filter(user => user.id !== id);
 }
 
 /**
@@ -73,7 +73,7 @@ export function deleteUserImp(id: number) {
     }
   }
 
-  if (index) list.splice(index, 1);
+  if (typeof index === 'number') list.splice(index, 1);
 }
 
 export function updateUserImp(
