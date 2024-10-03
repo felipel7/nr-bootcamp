@@ -5,6 +5,11 @@ export interface User {
   [key: string]: string | number;
 }
 
+export type UpdateUserData = {
+  bio?: string;
+  name?: string;
+};
+
 export const list: User[] = [
   {
     id: 1,
