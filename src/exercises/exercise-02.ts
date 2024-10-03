@@ -1,67 +1,57 @@
-interface Users {
-  id: number;
-  name: string;
-  bio: string;
-  [key: string]: any;
-}
-
-export let list: Users[] = [
-  {
-    id: 1,
-    name: 'Ada Lovelace',
-    bio: 'Ada Lovelace, foi uma matemática e escritora inglesa reconhecida por ter escrito o primeiro algoritmo para ser processado por uma máquina',
-  },
-  {
-    id: 2,
-    name: 'Alan Turing',
-    bio: 'Alan Turing foi um matemático, cientista da computação, lógico, criptoanalista, filósofo e biólogo teórico britânico, ele é amplamente considerado o pai da ciência da computação teórica e da inteligência artificial',
-  },
-  {
-    id: 3,
-    name: 'Nikola Tesla',
-    bio: 'Nikola Tesla foi um inventor, engenheiro eletrotécnico e engenheiro mecânico sérvio, mais conhecido por suas contribuições ao projeto do moderno sistema de fornecimento de eletricidade em corrente alternada.',
-  },
-  {
-    id: 4,
-    name: 'Nicolau Copérnico',
-    bio: 'Nicolau Copérnico foi um astrônomo e matemático polonês que desenvolveu a teoria heliocêntrica do Sistema Solar.',
-  },
-];
+import { list, UpdateUserData, User } from '../data/list';
 
 /**
+ * getBio
  *
- * Dado o array [list]:
- * a) Crie uma função que retorne a bio do id passado
+ * Procura a biografia de um usuário com base no ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário.
+ * @returns Uma `string` com a biografia do usuário ou `undefined` caso não seja encontrado.
  *
  */
-export function getBio(id: number) {
+export function getBio(id: number): string | undefined {
   return list.find(user => user.id === id)?.bio;
 }
 
 /**
+ * getName
  *
- * b) Crie uma função que retorne o name do id passado
+ * Procura o Nome de um usuário com base no ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário.
+ * @returns Uma `string` com a nome do usuário ou `undefined` caso não seja encontrado.
  *
  */
-export function getName(id: number) {
+export function getName(id: number): string | undefined {
   return list.find(user => user.id === id)?.name;
 }
 
 /**
+ * deleteUser
  *
- * c) Crie uma função que apague um item da lista a partir de um id passado
+ * Exclui um usuário da lista a partir de um ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário a ser excluído.
+ * @returns A lista de usuários filtrada, sem o usuário especificado.
  *
  */
-export function deleteUser(id: number) {
-  list = list.filter(user => user.id !== id);
+export function deleteUser(id: number): User[] {
+  return list.filter(user => user.id !== id);
 }
 
 /**
+ * updateUser
  *
- * d) Crie uma função que altere a bio ou o name a partir de um id passado
+ * Atualiza os dados de um usuário da lista a partir de um ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário.
+ * @param data - Objeto do tipo `UpdateUserData` contendo os campos opcionais `bio` e/ou `name`.
+ * @returns Não deve retornar nada.
+ *
+ * @remarks Apenas os campos `bio` e `name` presentes em `data` e que não são `undefined` serão atualizados no usuário.
  *
  */
-export function updateUser(id: number, data: { bio?: string; name?: string }) {
+export function updateUser(id: number, data: UpdateUserData): void {
   const user = list.find(user => user.id === id);
   if (!user) return;
 
@@ -71,28 +61,61 @@ export function updateUser(id: number, data: { bio?: string; name?: string }) {
 }
 
 /**
+ * getBioImp
  *
- * e) Demonstre todas as funções com o paradigma funcional e com o imperativo
+ * Procura a biografia de um usuário com base no ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário.
+ * @returns Uma `string` com a biografia do usuário ou `undefined` caso não seja encontrado.
  *
  */
-export function getBioImp(id: number) {
+export function getBioImp(id: number): string | undefined {
   const user = getUser(id);
 
   return user?.bio;
 }
 
-export function getNameImp(id: number) {
+/**
+ * getNameImp
+ *
+ * Procura o Nome de um usuário com base no ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário.
+ * @returns Uma `string` com a nome do usuário ou `undefined` caso não seja encontrado.
+ *
+ */
+export function getNameImp(id: number): string | undefined {
   const user = getUser(id);
 
   return user?.name;
 }
 
-function getUser(id: number) {
+/**
+ * getUser
+ *
+ * Procura o usuário com base no ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário.
+ * @returns Um usuário do tipo `User` ou `undefined` caso não seja encontrado.
+ *
+ * @remarks A função utiliza uma abordagem imperativa, iterando manualmente sobre a lista para encontrar o usuário com base no ID fornecido.
+ *
+ */
+function getUser(id: number): User | undefined {
   for (let userIndex = 0; userIndex < list.length; userIndex++)
     if (list[userIndex]?.id === id) return list[userIndex];
 }
 
-export function deleteUserImp(id: number) {
+/**
+ * deleteUserImp
+ *
+ * Exclui um usuário da lista a partir de um ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário a ser excluído.
+ * @returns Não deve retornar nada.
+ *
+ */
+export function deleteUserImp(id: number): void {
   let index: number | undefined;
   for (let userIndex = 0; userIndex < list.length; userIndex++) {
     if (list[userIndex]?.id === id) {
@@ -101,13 +124,21 @@ export function deleteUserImp(id: number) {
     }
   }
 
-  if (index) list.splice(index, 1);
+  if (typeof index === 'number') list.splice(index, 1);
 }
 
-export function updateUserImp(
-  id: number,
-  data: { bio?: string; name?: string }
-) {
+/**
+ * updateUserImp
+ *
+ * Atualiza os dados de um usuário da lista a partir de um ID fornecido.
+ *
+ * @param id - Número que corresponde ao ID do usuário.
+ * @param data - Objeto do tipo `UpdateUserData` contendo os campos opcionais `bio` e/ou `name`.
+ * @returns Não deve retornar nada.
+ *
+ * @remarks Apenas os campos `bio` e `name` presentes em `data` e que não são `undefined` serão atualizados no usuário.
+ */
+export function updateUserImp(id: number, data: UpdateUserData): void {
   for (let userIndex = 0; userIndex < list.length; userIndex++) {
     if (list[userIndex]?.id === id) {
       if (data.bio) list[userIndex].bio = data.bio;

@@ -66,22 +66,23 @@ label {
   margin-block: 0.5rem;
 }
 
-table {
+.table {
   width: 100%;
   border-collapse: collapse;
 }
 
-table th {
+.table__header {
   text-align: center;
 }
 
-th,
-td {
-  padding: 18px;
-  text-align: left;
+.table__header,
+.table__data {
+  padding: 16px;
+  text-align: center;
   border: 1px solid #404040;
 }
-tbody tr:nth-child(odd) {
+
+.table__body tr:nth-child(odd) {
   background-color: #1a1a1a;
 }
 

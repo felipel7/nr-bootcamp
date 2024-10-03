@@ -1,69 +1,64 @@
-import { findVowels } from './exercises/exercise-01';
-import { deleteUser, list, updateUser } from './exercises/exercise-02';
+import { list } from './data/list';
+import { countVowels } from './exercises/exercise-01';
+import { deleteUserImp, updateUser } from './exercises/exercise-02';
 import './style.css';
 
 /**
+ * createAnswerMessage
  *
- * a) Dar um exemplo de uso com uma palavra recebida via parâmetro da função.
+ * Retorna uma string concatenada com o texto e o número de vogais presentes nele.
  *
+ * @param text - Uma string que pode ou não conter vogais.
+ * @param totalVowels - O número de vogais contidos em `text`.
+ * @returns A `string` que corresponde a mensagem informando o número de vogais no texto.
+ *
+ * @remarks A função apenas concatena a mensagem. A contagem de vogais deve ser feita anteriormente e passada através do parâmetro `totalVowels`.
  */
-const phrase = 'Olá mundo!';
-const vowelsCount = findVowels(phrase);
-console.log(createAnswerMessage(phrase, vowelsCount));
-
-/**
- *
- * b) Dar um exemplo de uso com uma palavra recebida via input no formulário.
- *
- */
-document
-  .getElementById('text-form')
-  ?.addEventListener('submit', ($event: SubmitEvent) => {
-    $event.preventDefault();
-
-    const $form = new FormData($event.target as HTMLFormElement);
-    const inputValue = String($form.get('text-input'));
-    if (!inputValue) return;
-
-    const vowelsCount = findVowels(inputValue);
-    const message = createAnswerMessage(inputValue, vowelsCount);
-
-    appendAnswerMessage(message);
-  });
-
-function createAnswerMessage(phrase: string, vowelsCount: number) {
-  return `A frase: "${phrase}" possui ${vowelsCount} vogais.`;
+function createAnswerMessage(text: string, totalVowels: number): string {
+  return `A frase: "${text}" possui ${totalVowels} vogais.`;
 }
 
-// Adiciona a resposta no DOM
-function appendAnswerMessage(message: string) {
-  let $container = document.getElementById('first-exercise-answer');
+/**
+ * appendAnswerMessage
+ *
+ * Anexa ou atualiza uma mensagem no DOM. Se o container não existir, ele será criado.
+ *
+ * @param message - Uma string que representa a mensagem que será anexada ao elemento no DOM.
+ * @returns Não deve retornar nada.
+ *
+ * @remarks A função procura por um elemento com o ID `counter__result`. Se o elemento não for encontrado, um novo elemento `<p>` será criado e adicionado ao container com a classe `counter`.
+ */
+function appendAnswerMessage(message: string): void {
+  let $container = document.getElementById('counter__result');
 
   if (!$container) {
     $container = document.createElement('p');
-    $container.id = 'first-exercise-answer';
-    document.getElementById('first-exercise')?.appendChild($container);
+    $container.id = 'counter__result';
+    document.querySelector('.counter')?.appendChild($container);
   }
 
   $container.innerText = message;
 }
 
-// Retira a resposta do DOM quando o usuário limpa o form
-document.getElementById('text-form')?.addEventListener('reset', () => {
-  document.getElementById('first-exercise-answer')?.remove();
-});
-
-// Tabela de usuários
-function renderUserTable() {
-  document.querySelector('#user-table tbody')!.innerHTML = `
+/**
+ * renderUserTable
+ *
+ * Atualiza a tabela de usuários no DOM.
+ *
+ * @returns Não deve retornar nada.
+ *
+ * @remarks A função procura a tabela de usuários e altera o seu HTML interno passando os dados de cada usuário conforme a lista atualizada.
+ */
+function renderUserTable(): void {
+  document.querySelector('.table__body')!.innerHTML = `
   ${list
     .map(
       user => `
     <tr>
-      <td>${user.id}</td>
-      <td>${user.name}</td>
-      <td>${user.bio}</td>
-      <td>
+      <td class="table__data">${user.id}</td>
+      <td class="table__data">${user.name}</td>
+      <td class="table__data">${user.bio}</td>
+      <td class="table__data">
         <button onclick="deleteUserFromTable(${user.id})" title="Excluir ${user.name}" >
           <img src="../trash.svg" alt="Lixeira">
         </button>
@@ -75,32 +70,75 @@ function renderUserTable() {
 `;
 }
 
-renderUserTable();
-
-(window as any).deleteUserFromTable = (id: number) => {
-  deleteUser(id);
+/**
+ * deleteUserFromTable
+ *
+ * Anexa ao objeto global (window) do navegador uma função que será responsável por chamar a função de excluir um usuário e atualizar a exibição da tabela de usuários no DOM.
+ *
+ * @param id - Um número que corresponde ao ID do usuário que será excluído.
+ * @returns Não deve retornar nada.
+ *
+ * @remarks Após a exclusão do usuário, a tabela de usuários no DOM é atualizada.
+ */
+(window as any).deleteUserFromTable = (id: number): void => {
+  deleteUserImp(id);
   renderUserTable();
 };
 
-// Atualizar dados do usuário
-document
-  .getElementById('user-form')
-  ?.addEventListener('submit', ($event: SubmitEvent) => {
+(document.querySelector('.counter__form') as HTMLFormElement)?.addEventListener(
+  'submit',
+  ($event: SubmitEvent) => {
     $event.preventDefault();
 
     const $form = new FormData($event.target as HTMLFormElement);
-    const id = Number($form.get('user-id'));
+    const inputValue = $form.get('counter__input');
+    if (!inputValue || typeof inputValue !== 'string') return;
+
+    const vowelsCount = countVowels(inputValue);
+    const message = createAnswerMessage(inputValue, vowelsCount);
+
+    appendAnswerMessage(message);
+  }
+);
+
+document.querySelector('.counter__form')?.addEventListener('reset', () => {
+  document.getElementById('counter__result')?.remove();
+});
+
+/**
+ * clearEditFormInputs
+ *
+ * Reseta o formulário que é responsável por editar os dados do usuário.
+ *
+ * @returns Não deve retornar nada.
+ *
+ * @remarks A função procura o formulário através da classe `edit__form` e reseta todos os seus campos.
+ */
+function clearEditFormInputs(): void {
+  (document.querySelector('.edit__form') as HTMLFormElement).reset();
+}
+
+(document.querySelector('.edit__form') as HTMLFormElement)?.addEventListener(
+  'submit',
+  ($event: SubmitEvent) => {
+    $event.preventDefault();
+
+    const $form = new FormData($event.target as HTMLFormElement);
+    const id = Number($form.get('edit__id-input'));
     const data = {
-      bio: String($form.get('user-bio')),
-      name: String($form.get('user-name')),
+      bio: String($form.get('edit__bio-input')),
+      name: String($form.get('edit__name-input')),
     };
 
     updateUser(id, data);
     renderUserTable();
-    resetUserForm();
-  });
+    clearEditFormInputs();
+  }
+);
 
-// Resetar form do usuário após o envio
-function resetUserForm() {
-  (document.getElementById('user-form') as HTMLFormElement).reset();
-}
+// Exemplo de uso com uma palavra recebida via parâmetro da função.
+const text = 'Olá mundo!';
+const totalVowels = countVowels(text);
+console.log(createAnswerMessage(text, totalVowels));
+
+renderUserTable();
