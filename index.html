@@ -10,49 +10,49 @@
     <main id="app">
       <h1>Exercícios de Nivelamento</h1>
 
-      <section id="first-exercise">
+      <section class="counter">
         <h2>Primeiro Exercício</h2>
-        <form id="text-form">
+        <form class="counter__form">
           <p>
-            <label for="text-input">Escreva uma palavra ou frase:</label>
-            <input type="text" id="text-input" name="text-input" />
+            <label for="counter__input"> Escreva uma palavra ou frase: </label>
+            <input id="counter__input" name="counter__input" type="text" />
           </p>
           <button type="submit">Contar Vogais</button>
           <button type="reset">Limpar</button>
         </form>
       </section>
 
-      <section id="second-exercise">
+      <section>
         <h2>Segundo Exercício</h2>
 
-        <table id="user-table">
+        <table class="table">
           <thead>
             <tr>
-              <th>Id</th>
-              <th>Nome</th>
-              <th>Bio</th>
-              <th>Ações</th>
+              <th class="table__header">Id</th>
+              <th class="table__header">Nome</th>
+              <th class="table__header">Bio</th>
+              <th class="table__header">Ações</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody class="table__body"></tbody>
         </table>
       </section>
 
-      <section id="third-exercise">
+      <section class="edit">
         <h2>Terceiro Exercício</h2>
 
-        <form id="user-form">
+        <form class="edit__form">
           <p>
-            <label for="user-id">Id do usuário:</label>
-            <input type="number" id="user-id" name="user-id" />
+            <label for="edit__id-input">Id do usuário:</label>
+            <input type="number" id="edit__id-input" name="edit__id-input" />
           </p>
           <p>
-            <label for="user-name">Nome:</label>
-            <input type="text" id="user-name" name="user-name" />
+            <label for="edit__name-input">Nome:</label>
+            <input type="text" id="edit__name-input" name="edit__name-input" />
           </p>
           <p>
-            <label for="user-bio">Bio:</label>
-            <input type="text" id="user-bio" name="user-bio" />
+            <label for="edit__bio-input">Bio:</label>
+            <input type="text" id="edit__bio-input" name="edit__bio-input" />
           </p>
           <button type="submit">Atualizar Usuário</button>
         </form>

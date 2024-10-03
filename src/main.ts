@@ -3,20 +3,21 @@ import { deleteUser, list, updateUser } from './exercises/exercise-02';
 import './style.css';
 
 // 1.b) Dar um exemplo de uso com uma palavra recebida via input no formulário.
-document
-  .getElementById('text-form')
-  ?.addEventListener('submit', ($event: SubmitEvent) => {
+(document.querySelector('.counter__form') as HTMLFormElement)?.addEventListener(
+  'submit',
+  ($event: SubmitEvent) => {
     $event.preventDefault();
 
     const $form = new FormData($event.target as HTMLFormElement);
-    const inputValue = String($form.get('text-input'));
+    const inputValue = String($form.get('counter__input'));
     if (!inputValue) return;
 
     const vowelsCount = countVowels(inputValue);
     const message = createAnswerMessage(inputValue, vowelsCount);
 
     appendAnswerMessage(message);
-  });
+  }
+);
 
 function createAnswerMessage(phrase: string, vowelsCount: number) {
   return `A frase: "${phrase}" possui ${vowelsCount} vogais.`;
@@ -24,33 +25,33 @@ function createAnswerMessage(phrase: string, vowelsCount: number) {
 
 // Adiciona a resposta no DOM
 function appendAnswerMessage(message: string) {
-  let $container = document.getElementById('first-exercise-answer');
+  let $container = document.getElementById('counter__result');
 
   if (!$container) {
     $container = document.createElement('p');
-    $container.id = 'first-exercise-answer';
-    document.getElementById('first-exercise')?.appendChild($container);
+    $container.id = 'counter__result';
+    document.querySelector('.counter')?.appendChild($container);
   }
 
   $container.innerText = message;
 }
 
 // Retira a resposta do DOM quando o usuário limpa o form
-document.getElementById('text-form')?.addEventListener('reset', () => {
-  document.getElementById('first-exercise-answer')?.remove();
+document.querySelector('.counter__form')?.addEventListener('reset', () => {
+  document.getElementById('counter__result')?.remove();
 });
 
 // Tabela de usuários
 function renderUserTable() {
-  document.querySelector('#user-table tbody')!.innerHTML = `
+  document.querySelector('.table__body')!.innerHTML = `
   ${list
     .map(
       user => `
     <tr>
-      <td>${user.id}</td>
-      <td>${user.name}</td>
-      <td>${user.bio}</td>
-      <td>
+      <td class="table__data">${user.id}</td>
+      <td class="table__data">${user.name}</td>
+      <td class="table__data">${user.bio}</td>
+      <td class="table__data">
         <button onclick="deleteUserFromTable(${user.id})" title="Excluir ${user.name}" >
           <img src="../trash.svg" alt="Lixeira">
         </button>
@@ -70,26 +71,27 @@ renderUserTable();
 };
 
 // Atualizar dados do usuário
-document
-  .getElementById('user-form')
-  ?.addEventListener('submit', ($event: SubmitEvent) => {
+(document.querySelector('.edit__form') as HTMLFormElement)?.addEventListener(
+  'submit',
+  ($event: SubmitEvent) => {
     $event.preventDefault();
 
     const $form = new FormData($event.target as HTMLFormElement);
-    const id = Number($form.get('user-id'));
+    const id = Number($form.get('edit__id-input'));
     const data = {
-      bio: String($form.get('user-bio')),
-      name: String($form.get('user-name')),
+      bio: String($form.get('edit__bio-input')),
+      name: String($form.get('edit__name-input')),
     };
 
     updateUser(id, data);
     renderUserTable();
     resetUserForm();
-  });
+  }
+);
 
 // Resetar form do usuário após o envio
 function resetUserForm() {
-  (document.getElementById('user-form') as HTMLFormElement).reset();
+  (document.querySelector('.edit__form') as HTMLFormElement).reset();
 }
 
 // 1.a) Dar um exemplo de uso com uma palavra recebida via parâmetro da função.
