@@ -2,28 +2,10 @@ import { countVowels } from './exercises/exercise-01';
 import { deleteUser, list, updateUser } from './exercises/exercise-02';
 import './style.css';
 
-// 1.b) Dar um exemplo de uso com uma palavra recebida via input no formulário.
-(document.querySelector('.counter__form') as HTMLFormElement)?.addEventListener(
-  'submit',
-  ($event: SubmitEvent) => {
-    $event.preventDefault();
-
-    const $form = new FormData($event.target as HTMLFormElement);
-    const inputValue = String($form.get('counter__input'));
-    if (!inputValue) return;
-
-    const vowelsCount = countVowels(inputValue);
-    const message = createAnswerMessage(inputValue, vowelsCount);
-
-    appendAnswerMessage(message);
-  }
-);
-
-function createAnswerMessage(phrase: string, vowelsCount: number) {
-  return `A frase: "${phrase}" possui ${vowelsCount} vogais.`;
+function createAnswerMessage(text: string, totalVowels: number): string {
+  return `A frase: "${text}" possui ${totalVowels} vogais.`;
 }
 
-// Adiciona a resposta no DOM
 function appendAnswerMessage(message: string) {
   let $container = document.getElementById('counter__result');
 
@@ -36,12 +18,6 @@ function appendAnswerMessage(message: string) {
   $container.innerText = message;
 }
 
-// Retira a resposta do DOM quando o usuário limpa o form
-document.querySelector('.counter__form')?.addEventListener('reset', () => {
-  document.getElementById('counter__result')?.remove();
-});
-
-// Tabela de usuários
 function renderUserTable() {
   document.querySelector('.table__body')!.innerHTML = `
   ${list
@@ -63,14 +39,36 @@ function renderUserTable() {
 `;
 }
 
-renderUserTable();
+function resetUserForm() {
+  (document.querySelector('.edit__form') as HTMLFormElement).reset();
+}
 
 (window as any).deleteUserFromTable = (id: number) => {
   deleteUser(id);
   renderUserTable();
 };
 
-// Atualizar dados do usuário
+// 1.b) Dar um exemplo de uso com uma palavra recebida via input no formulário.
+(document.querySelector('.counter__form') as HTMLFormElement)?.addEventListener(
+  'submit',
+  ($event: SubmitEvent) => {
+    $event.preventDefault();
+
+    const $form = new FormData($event.target as HTMLFormElement);
+    const inputValue = String($form.get('counter__input'));
+    if (!inputValue) return;
+
+    const vowelsCount = countVowels(inputValue);
+    const message = createAnswerMessage(inputValue, vowelsCount);
+
+    appendAnswerMessage(message);
+  }
+);
+
+document.querySelector('.counter__form')?.addEventListener('reset', () => {
+  document.getElementById('counter__result')?.remove();
+});
+
 (document.querySelector('.edit__form') as HTMLFormElement)?.addEventListener(
   'submit',
   ($event: SubmitEvent) => {
@@ -89,12 +87,9 @@ renderUserTable();
   }
 );
 
-// Resetar form do usuário após o envio
-function resetUserForm() {
-  (document.querySelector('.edit__form') as HTMLFormElement).reset();
-}
-
 // 1.a) Dar um exemplo de uso com uma palavra recebida via parâmetro da função.
 const text = 'Olá mundo!';
 const totalVowels = countVowels(text);
 console.log(createAnswerMessage(text, totalVowels));
+
+renderUserTable();
